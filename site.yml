@@ -1,0 +1,143 @@
+---
+
+- name: Get domains from libvirt
+  collections:
+    - community.libvirt
+  hosts: libvirt
+  gather_facts: no
+  remote_user: truch
+  become: true
+  become_method: sudo
+  vars:
+    template_host: template-host
+
+  tasks:
+  
+  - name: list all VMs
+    community.libvirt.virt:
+      command: list_vms
+    register: all_vms
+
+  - name: Print all VM's
+    ansible.builtin.debug:
+      msg: '{{ all_vms }}'
+  
+  - name: list only running VMs
+    community.libvirt.virt:
+      command: list_vms
+      state: running
+    register: running_vms
+
+  - name: Print all running VM's
+    ansible.builtin.debug:
+      msg: '{{ running_vms }}'
+
+  - name: Start the template host
+    community.libvirt.virt:
+      name: '{{ template_host }}'
+      state: running
+
+
+- name: Check that Template host is up
+  hosts: template-host.local
+  gather_facts: no
+  #become: yes
+  remote_user: ansible
+  #become_method: sudo
+  #become: true
+
+  tasks:
+  - name: Wait for connection...
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300
+
+
+#- name: Get Updates
+#  hosts: template-host.local
+#  gather_facts: no
+#  #become: yes
+#  remote_user: root
+#  vars:
+#    check_only: yes
+#
+#  tasks:
+#  - name: check operating system
+#    assert:
+#      that: "ansible_os_family == 'RedHat'"
+#
+#  - name: check for updates
+#    yum:
+#      name: '*'
+#      state: latest
+#      exclude: kernel*
+#    check_mode: "{{ check_only }}"
+#    register: updates
+#
+#  - name: output updates dictionary
+#    debug:
+#      msg: "{{ updates }}"
+#    
+#  - name: updated package list
+#    debug:
+#      msg: "{% if item[0] in packages %}{{ packages[item[0]][0].version }}-{{ packages[item[0]][0].release }}.{{ packages[item[0]][0].arch }} >>> {{ item[1] }} {% else %} {{ item[1] }}{% endif %}"
+#    loop: "{{ updates.changes.updated }}"
+#    loop_control:
+#      label: "{{ item[0] }}"
+#    when: updates.changes is defined
+
+
+- name: Patch Template Host
+  hosts: template-host.local
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  remote_user: ansible
+
+  tasks:
+  - name: Upgrade OS to latest packages available
+    yum:
+      name: 'containers-common'
+      security: yes
+      state: latest
+
+  - name: Reboot server
+    reboot:
+    register: reboot_result
+
+  - name: Wait for connection...
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300
+
+
+- name: Ensure that template is shut down
+  collections:
+    - community.libvirt
+  hosts: libvirt
+  gather_facts: no
+  remote_user: truch
+  become: true
+  become_method: sudo
+  vars:
+    template_host: template-host
+  tasks:
+  - name: 
+    community.libvirt.virt:
+      name: '{{ template_host }}'
+      state: shutdown
+
+  - name: list only running VMs
+    community.libvirt.virt:
+      command: list_vms
+      state: running
+    register: running_vms
+
+  - name: Print all running VM's
+    ansible.builtin.debug:
+      msg: '{{ running_vms }}'
+
