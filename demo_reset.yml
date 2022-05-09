@@ -4,11 +4,12 @@
   collections:
     - community.libvirt
   hosts: libvirt
+  gather_facts: no
   remote_user: truch
   become: true
   become_method: sudo
   vars:
-    domain: template_host
+    domain: template-host
     snapshot_name: ready_for_demo
 
   tasks:
