@@ -17,10 +17,11 @@
     virt:
       name: '{{ domain }}'
       state: shutdown
+    register: shutdown_vms
 
   - name: print out the VMs
     ansible.builtin.debug:
-      msg: all_vm
+      msg: shutdown_vms
 
   - name: Revert to snapshot of the host
     ansible.builtin.command:
