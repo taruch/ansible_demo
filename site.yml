@@ -39,7 +39,7 @@
 
 
 - name: Check that Template host is up
-  hosts: template-host.local
+  hosts: template
   gather_facts: no
   #become: yes
   remote_user: ansible
@@ -55,38 +55,39 @@
       timeout: 300
 
 
-#- name: Get Updates
-#  hosts: template-host.local
-#  gather_facts: no
-#  #become: yes
-#  remote_user: root
-#  vars:
-#    check_only: yes
-#
-#  tasks:
-#  - name: check operating system
-#    assert:
-#      that: "ansible_os_family == 'RedHat'"
-#
-#  - name: check for updates
-#    yum:
-#      name: '*'
-#      state: latest
-#      exclude: kernel*
-#    check_mode: "{{ check_only }}"
-#    register: updates
-#
-#  - name: output updates dictionary
-#    debug:
-#      msg: "{{ updates }}"
-#    
-#  - name: updated package list
-#    debug:
-#      msg: "{% if item[0] in packages %}{{ packages[item[0]][0].version }}-{{ packages[item[0]][0].release }}.{{ packages[item[0]][0].arch }} >>> {{ item[1] }} {% else %} {{ item[1] }}{% endif %}"
-#    loop: "{{ updates.changes.updated }}"
-#    loop_control:
-#      label: "{{ item[0] }}"
-#    when: updates.changes is defined
+- name: Get Updates
+  hosts: template-host.local
+  become: yes
+  remote_user: ansible
+  become_method: sudo
+  vars:
+    template_host: template-host
+    check_only: yes
+
+  tasks:
+  - name: check operating system
+    assert:
+      that: "ansible_os_family == 'RedHat'"
+
+  - name: check for updates
+    yum:
+      name: '*'
+      state: latest
+      #exclude: kernel*
+    check_mode: "{{ check_only }}"
+    register: updates
+
+  - name: output updates dictionary
+    debug:
+      msg: "{{ updates }}"
+    
+  - name: updated package list
+    debug:
+      msg: "{% if item[0] in packages %}{{ packages[item[0]][0].version }}-{{ packages[item[0]][0].release }}.{{ packages[item[0]][0].arch }} >>> {{ item[1] }} {% else %} {{ item[1] }}{% endif %}"
+    loop: "{{ updates.changes.updated }}"
+    loop_control:
+      label: "{{ item[0] }}"
+    when: updates.changes is defined
 
 
 - name: Patch Template Host
@@ -131,13 +132,16 @@
       name: '{{ template_host }}'
       state: shutdown
 
-  - name: list only running VMs
+  - name: Pause for 10 seconds for VM to shutdown
+    pause:
+      seconds: 10
+
+  - name: list only shutdown VMs
     community.libvirt.virt:
       command: list_vms
-      state: running
-    register: running_vms
+      state: shutdown
+    register: shutdown_vms
 
-  - name: Print all running VM's
+  - name: Print shutdown VMs
     ansible.builtin.debug:
-      msg: '{{ running_vms }}'
-
+      msg: '{{ shutdown_vms }}'
