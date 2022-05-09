@@ -26,4 +26,4 @@
 
   - name: Revert to snapshot of the host
     community.libvirt.virt:
-      command: snapshot snapshot-create-as --domain "{{ domain }}" --name "{{snapshot_name }}"
+      command: snapshot snapshot-revert --domain "{{ domain }}" --snapshotname "{{snapshot_name }}"
