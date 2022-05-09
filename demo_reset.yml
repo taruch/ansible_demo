@@ -13,9 +13,6 @@
     snapshot_name: ready_for_demo
 
   tasks:
-  #- name: Unconditionally shut down the machine with all defaults
-  #  community.general.shutdown: 
-
   - name: Ensure the host is shutdown
     virt:
       name: '{{ domain }}'
@@ -26,5 +23,5 @@
       msg: all_vm
 
   - name: Revert to snapshot of the host
-    community.libvirt.virt:
-      command: snapshot snapshot-revert --domain "{{ domain }}" --snapshotname "{{snapshot_name }}"
+    ansible.builtin.command:
+      'virsh snapshot-revert --domain "{{ domain }}" --snapshotname "{{snapshot_name }}"'
