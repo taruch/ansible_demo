@@ -124,7 +124,7 @@
 
   - name: Pause for 10 seconds for VM to shutdown
     pause:
-      seconds: 10
+      seconds: 30
 
   - name: list only shutdown VMs
     community.libvirt.virt:
