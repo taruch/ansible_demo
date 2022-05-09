@@ -1,0 +1,29 @@
+---
+
+- name: Reset the demo system
+  collections:
+    - community.libvirt
+  hosts: libvirt
+  remote_user: truch
+  become: true
+  become_method: sudo
+  vars:
+    domain: template_host
+    snapshot_name: ready_for_demo
+
+  tasks:
+  #- name: Unconditionally shut down the machine with all defaults
+  #  community.general.shutdown: 
+
+  - name: Ensure the host is shutdown
+    virt:
+      name: '{{ domain }}'
+      state: shutdown
+
+  - name: print out the VMs
+    ansible.builtin.debug:
+      msg: all_vm
+
+  - name: Revert to snapshot of the host
+    community.libvirt.virt:
+      command: snapshot snapshot-create-as --domain "{{ domain }}" --name "{{snapshot_name }}"
