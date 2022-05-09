@@ -22,16 +22,6 @@
     ansible.builtin.debug:
       msg: '{{ all_vms }}'
   
-  - name: list only running VMs
-    community.libvirt.virt:
-      command: list_vms
-      state: running
-    register: running_vms
-
-  - name: Print all running VM's
-    ansible.builtin.debug:
-      msg: '{{ running_vms }}'
-
   - name: Start the template host
     community.libvirt.virt:
       name: '{{ template_host }}'
@@ -39,7 +29,7 @@
 
 
 - name: Check that Template host is up
-  hosts: template
+  hosts: templates
   gather_facts: no
   #become: yes
   remote_user: ansible
@@ -56,7 +46,7 @@
 
 
 - name: Get Updates
-  hosts: template-host.local
+  hosts: templates
   become: yes
   remote_user: ansible
   become_method: sudo
@@ -91,7 +81,7 @@
 
 
 - name: Patch Template Host
-  hosts: template-host.local
+  hosts: templates
   gather_facts: no
   become: yes
   become_method: sudo
