@@ -10,9 +10,7 @@
   become_method: sudo
   vars:
     template_host: template-host
-
   tasks:
-  
   - name: list all VMs
     community.libvirt.virt:
       command: list_vms
@@ -31,11 +29,7 @@
 - name: Check that Template host is up
   hosts: templates
   gather_facts: no
-  #become: yes
   remote_user: ansible
-  #become_method: sudo
-  #become: true
-
   tasks:
   - name: Wait for connection...
     wait_for_connection:
@@ -53,7 +47,6 @@
   vars:
     template_host: template-host
     check_only: yes
-
   tasks:
   - name: check operating system
     assert:
@@ -91,7 +84,7 @@
   - name: Upgrade OS to latest packages available
     yum:
       name: 'containers-common'
-      security: yes
+      #security: yes
       state: latest
 
   - name: Reboot server
