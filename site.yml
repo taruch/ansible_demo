@@ -114,7 +114,7 @@
       name: '{{ template_host }}'
       state: shutdown
 
-  - name: Pause for 10 seconds for VM to shutdown
+  - name: Pause for 30 seconds for VM to shutdown
     pause:
       seconds: 30
 
