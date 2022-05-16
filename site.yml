@@ -114,9 +114,9 @@
       name: '{{ template_host }}'
       state: shutdown
 
-  - name: Pause for 30 seconds for VM to shutdown
+  - name: Pause for 40 seconds for VM to shutdown
     pause:
-      seconds: 30
+      seconds: 40
 
   - name: list only shutdown VMs
     community.libvirt.virt:
