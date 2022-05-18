@@ -3,7 +3,7 @@
 - name: Ensure that template is shut down
   collections:
     - community.libvirt
-  hosts: libvirt
+  hosts: all
   gather_facts: no
   remote_user: truch
   become: true
