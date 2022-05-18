@@ -123,12 +123,13 @@
     pause:
       seconds: 40
 
-  - name: list only shutdown VMs
-    community.libvirt.virt:
-      command: list_vms
-      state: shutdown
-    register: shutdown_vms
 
-  - name: Print shutdown VMs
+  - name: Determine if template host is shutdown
     ansible.builtin.debug:
-      msg: '{{ shutdown_vms }}'
+      msg: '{{ all_vms.list_vms }}'
+
+  - name: Print status
+    ansible.builtin.debug:
+      msg: '{{ template_host }} has been shut down'
+    when: template_host in vms
+
