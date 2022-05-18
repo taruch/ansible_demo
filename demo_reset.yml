@@ -10,7 +10,7 @@
   become_method: sudo
   vars:
     domain: template-host
-    snapshot_name: ready_for_demo
+    snapshot_name: rr_for_demo
 
   tasks:
   - name: Ensure the host is shutdown
