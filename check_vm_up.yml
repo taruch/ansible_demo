@@ -1,7 +1,7 @@
 ---
 
 - name: Check that Template host is up
-  hosts: templates
+  hosts: all
   gather_facts: no
   remote_user: ansible
   tasks:
