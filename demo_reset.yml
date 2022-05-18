@@ -3,7 +3,7 @@
 - name: Reset the demo system
   collections:
     - community.libvirt
-  hosts: libvirt
+  hosts: all
   gather_facts: no
   remote_user: truch
   become: true
