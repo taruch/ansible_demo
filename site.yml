@@ -114,10 +114,9 @@
     pause:
       seconds: 40
 
-
-  - name: Determine if template host is shutdown
-    ansible.builtin.debug:
-      msg: '{{ all_vms.list_vms }}'
+  - name:
+    set_fact:
+      vms: '{{ all_vms.list_vms }}'
 
   - name: Print status
     ansible.builtin.debug:
