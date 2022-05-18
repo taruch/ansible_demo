@@ -1,0 +1,31 @@
+---
+
+- name: Patch Template Host
+  hosts: templates
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  remote_user: ansible
+
+  tasks:
+  - name: Upgrade OS to latest packages available
+    yum:
+      name: 'containers-common'
+      #security: yes
+      state: latest
+    register: updates
+
+  - name: output updates dictionary
+    debug:
+      msg: "{{ updates.results }}"
+
+  - name: Reboot server
+    reboot:
+    register: reboot_result
+
+  - name: Wait for connection...
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300

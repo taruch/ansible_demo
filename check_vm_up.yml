@@ -1,0 +1,13 @@
+---
+
+- name: Check that Template host is up
+  hosts: templates
+  gather_facts: no
+  remote_user: ansible
+  tasks:
+  - name: Wait for connection...
+    wait_for_connection:
+      connect_timeout: 20
+      sleep: 5
+      delay: 5
+      timeout: 300

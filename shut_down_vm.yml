@@ -1,0 +1,37 @@
+---
+
+- name: Ensure that template is shut down
+  collections:
+    - community.libvirt
+  hosts: libvirt
+  gather_facts: no
+  remote_user: truch
+  become: true
+  become_method: sudo
+  vars:
+    template_host: template-host
+  tasks:
+  - name: 
+    community.libvirt.virt:
+      name: '{{ template_host }}'
+      state: shutdown
+
+  - name: Pause for 40 seconds for VM to shutdown
+    pause:
+      seconds: 40
+
+  - name: Get shutdown VMs
+    community.libvirt.virt:
+      command: list_vms
+      state: shutdown
+    register: shutdown_vms
+
+  - name:
+    set_fact:
+      vms: '{{ shutdown_vms.list_vms }}'
+
+  - name: Print status
+    ansible.builtin.debug:
+      msg: '{{ template_host }} has been shut down'
+    when: template_host in vms
+
