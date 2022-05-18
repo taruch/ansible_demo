@@ -3,6 +3,7 @@
 - name: Get domains from libvirt
   collections:
     - community.libvirt
+  hosts: all
   gather_facts: no
   become: true
   become_method: sudo
@@ -13,15 +14,3 @@
     community.libvirt.virt:
       name: '{{ template_host }}'
       state: running
-
-
-- name: Check that Template host is up
-  gather_facts: no
-  remote_user: ansible
-  tasks:
-  - name: Wait for connection...
-    wait_for_connection:
-      connect_timeout: 20
-      sleep: 5
-      delay: 5
-      timeout: 300
