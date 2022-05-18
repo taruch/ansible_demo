@@ -114,9 +114,15 @@
     pause:
       seconds: 40
 
+  - name: Get shutdown VMs
+    community.libvirt.virt:
+      command: list_vms
+      state: shutdown
+    register: shutdown_vms
+
   - name:
     set_fact:
-      vms: '{{ all_vms.list_vms }}'
+      vms: '{{ shutdown_vms.list_vms }}'
 
   - name: Print status
     ansible.builtin.debug:
