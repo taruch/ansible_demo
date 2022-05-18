@@ -1,7 +1,7 @@
 ---
 
 - name: Patch Template Host
-  hosts: templates
+  hosts: all
   gather_facts: no
   become: yes
   become_method: sudo
@@ -22,10 +22,3 @@
   - name: Reboot server
     reboot:
     register: reboot_result
-
-  - name: Wait for connection...
-    wait_for_connection:
-      connect_timeout: 20
-      sleep: 5
-      delay: 5
-      timeout: 300
