@@ -11,15 +11,6 @@
   vars:
     template_host: template-host
   tasks:
-  - name: list all VMs
-    community.libvirt.virt:
-      command: list_vms
-    register: all_vms
-
-  - name: Print all VM's
-    ansible.builtin.debug:
-      msg: '{{ all_vms }}'
-  
   - name: Start the template host
     community.libvirt.virt:
       name: '{{ template_host }}'
@@ -89,7 +80,7 @@
 
   - name: output updates dictionary
     debug:
-      msg: "{{ updates }}"
+      msg: "{{ updates.results }}"
 
   - name: Reboot server
     reboot:
