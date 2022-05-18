@@ -3,9 +3,7 @@
 - name: Get domains from libvirt
   collections:
     - community.libvirt
-  hosts: libvirt
   gather_facts: no
-  remote_user: truch
   become: true
   become_method: sudo
   vars:
@@ -18,7 +16,6 @@
 
 
 - name: Check that Template host is up
-  hosts: templates
   gather_facts: no
   remote_user: ansible
   tasks:
