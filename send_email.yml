@@ -1,0 +1,10 @@
+- mail:
+ - name: Sending contents of a file in the email body
+   mail:
+    host: smtp.mandrillapp.com
+    port: 587 
+    username: 28283aeebd83616c6
+    password: 0432eb4224e406
+    to: Adam Shields <adam@gmail.com>
+    subject: Change log
+    body: "{{ lookup('file', '/var/www/release.txt') }}"
