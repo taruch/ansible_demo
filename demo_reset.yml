@@ -9,8 +9,8 @@
   become: true
   become_method: sudo
   vars:
-    domain: template-host
-    snapshot_name: rr_for_demo
+    domain: template-demo
+    snapshot_name: template-initial
 
   tasks:
   - name: Ensure the host is shutdown
