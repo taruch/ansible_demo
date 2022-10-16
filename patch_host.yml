@@ -11,7 +11,7 @@
   - name: Upgrade OS to latest packages available
     yum:
       name: 'containers-common'
-      #security: yes
+      security: yes
       state: latest
     register: updates
 
