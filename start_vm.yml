@@ -7,7 +7,7 @@
   gather_facts: no
   become: true
   become_method: sudo
-  remote_user: ansible
+  remote_user: truch
 
   vars:
     template_host: template-host
