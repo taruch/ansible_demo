@@ -7,6 +7,8 @@
   gather_facts: no
   become: true
   become_method: sudo
+  remote_user: ansible
+
   vars:
     template_host: template-host
   tasks:
