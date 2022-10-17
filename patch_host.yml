@@ -9,9 +9,11 @@
 
   tasks:
   - name: Upgrade OS to latest packages available
-    yum:
+    dnf:
       name: 'containers-common'
       security: yes
+      nobest: yes
+      skip_broken: yes
       state: latest
     register: updates
 
