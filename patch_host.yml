@@ -10,7 +10,7 @@
   tasks:
   - name: Upgrade OS to latest packages available
     dnf:
-      name: 'containers-common'
+      name: '*'
       security: yes
       nobest: yes
       skip_broken: yes
