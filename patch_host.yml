@@ -15,6 +15,7 @@
       nobest: yes
       skip_broken: yes
       allowerasing: yes
+      disable_gpg_check: yes
       state: latest
     register: updates
 
